@@ -1,8 +1,15 @@
-#include <stdio.h>
+#include stdio.h> 
 
-int  main()
-{
-    printf("Hello. My email address is:\n jeong-hyun.kim@student.manchester.ac.uk");
+ 
 
-    return 0;
-}
+int main(void 
+
+{ 
+
+    printf("Hello World") 
+
+ 
+
+    return 0; 
+
+} 
