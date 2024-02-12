@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int  main()
+int main()
 {
     printf("Hello. My email address is:\njeong-hyun.kim@student.manchester.ac.uk");
 
