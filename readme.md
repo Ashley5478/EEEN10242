@@ -50,7 +50,7 @@ To create the branch:
 ```git
 git branch [YOUR BRANCH NAME]
 ```
-where you put the name of the branch by replacing the square brackets and the text between them. It is highly advisable to use underscores rather than spacebar as this would require one to use quotation marks.
+where you put the name of the branch by replacing the square brackets and the text between them. It is highly advisable to use underscores rather than spaces as this would require one to use quotation marks.
 
 To switch the branch you are exploring:
 ```git
@@ -58,3 +58,17 @@ git switch [DESTINATION BRANCH NAME]
 ```
 
 The default branch of the git is "main" which is the master.
+
+To delete a local branch (Does not remove the branch on GitHub):
+```git
+git branch -d [localBranchName]
+```
+or
+```git
+git branch --delete [localBranchName]
+```
+
+If you want to delete a remote branch on GitHub, use:
+```git
+git push remote -d [RemoteBranchName]
+```
