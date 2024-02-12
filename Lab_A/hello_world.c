@@ -1,3 +1,4 @@
+//This file is for Lab_A submission for EEEN10242 C Programming.
 #include <stdio.h>
 
 int main()
