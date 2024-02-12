@@ -12,27 +12,49 @@ git remote set-url origin https://github.com/Ashley5478/EEEN10242.git
 ```
 
 ## Usage
+To download from the GitHub, use
+```git
+git pull https://github.com/Ashley5478/EEEN10242.git
+```
+on your command prompt. You may be asked to log in to your GitHub.
 
-```python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
+## Posting
+To undergo "stage changes" and add all the files,
+```git
+git add -A
+```
+or
+```git
+git add *
 ```
 
-## Contributing
+To check your git status,
+```git
+git status
+```
 
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+Describe any changes you made:
+```git
+git commit -m "YOUR TEXT HERE"
+```
 
-Please make sure to update tests as appropriate.
+And then finally, publish it:
+```git
+git push
+```
 
-## License
+## Managing Branches
+Managing branches are not as straightforward as there are so many options you can use for your command. However, it is useful especially when you want to make changes to existing source code and you don't want to risk losing the original code. You can also accept or reject the collaborators' changes and even merge the codes to the upper branch.
 
-[MIT](https://choosealicense.com/licenses/mit/)
+To create the branch:
+```git
+git branch [YOUR BRANCH NAME]
+```
+where you put the name of the branch by replacing the square brackets and the text between them. It is highly advisable to use underscores rather than spacebar as this would require one to use quotation marks.
+
+To switch the branch you are exploring:
+```git
+git switch [DESTINATION BRANCH NAME]
+```
+
+The default branch of the git is "main" which is the master.
