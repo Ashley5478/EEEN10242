@@ -28,6 +28,8 @@ or
 git add *
 ```
 
+Note: `git add .` adds new files but does not delete the existing file. `git add -u` stages all the changes and deletions but does not add any new file. This operation is **case sensitive!**
+
 To check your git status,
 ```git
 git status
@@ -42,6 +44,7 @@ And then finally, publish it:
 ```git
 git push
 ```
+**Note**: If you create a local branch, synchronize your project, and then remove the local branch, the old branch in the remote GitHub repository will remain live. You will have to delete the unnecessary branch by using `git push remote -d [RemoteBranchName]` and replace the "[RemoteBranchName]" with the name of the useless branch you have deleted locally.
 
 ## Managing Branches
 Managing branches are not as straightforward as there are so many options you can use for your command. However, it is useful especially when you want to make changes to existing source code and you don't want to risk losing the original code. You can also accept or reject the collaborators' changes and even merge the codes to the upper branch.
