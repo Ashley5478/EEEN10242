@@ -28,7 +28,7 @@ or
 git add *
 ```
 
-Note: `git add .` adds new files but does not delete the existing file. `git add -u` stages all the changes and deletions but does not add any new file.
+Note: `git add .` adds new files but does not delete the existing file. `git add -u` stages all the changes and deletions but does not add any new file. This operation is **case sensitive!**
 
 To check your git status,
 ```git
