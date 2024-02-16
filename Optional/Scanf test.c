@@ -33,6 +33,9 @@ int main()
         case '/':
             printf("The division of the two numbers and the quantity is: %d %c",number1 / number2, quantity);
             break;
+        case '%':
+            printf("The remainder after division is: %d %c",number1 % number2, quantity);
+            break;
         
         default:
             printf("Invalid operator\n");
