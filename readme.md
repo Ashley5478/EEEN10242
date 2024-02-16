@@ -1,10 +1,15 @@
 # EEEN10242 C Programming GitHub Repository
 
-This is the lab activity for University of Manchester C Programming course.
+This is the lab activity for the University of Manchester C Programming course.
 
 ## Installation
 
-If you are willing to update this repository in a new PC, please type the following commands to identify yourself.
+If you are willing to install this repository on a new PC or new directory, please type:
+```git
+git clone https://github.com/Ashley5478/EEEN10242.git
+```
+
+If you are willing to update this repository on a PC with an existing directory, please type the following commands to identify yourself.
 ```git
 git config --global user.name "Jeong-Hyun Kim"
 git config --global user.email "jeong-hyun.kim@student.manchester.ac.uk"
@@ -28,7 +33,7 @@ or
 git add *
 ```
 
-Note: `git add .` adds new files but does not delete the existing file. `git add -u` stages all the changes and deletions but does not add any new file. This operation is **case sensitive!**
+Note: `git add .` adds new files but does not delete the existing file. `git add -u` stages all the changes and deletions but does not add any new files. This operation is **case sensitive!**
 
 To check your git status,
 ```git
@@ -47,7 +52,7 @@ git push
 **Note**: If you create a local branch, synchronize your project, and then remove the local branch, the old branch in the remote GitHub repository will remain live. You will have to delete the unnecessary branch by using `git push remote -d [RemoteBranchName]` and replace the "[RemoteBranchName]" with the name of the useless branch you have deleted locally.
 
 ## Managing Branches
-Managing branches are not as straightforward as there are so many options you can use for your command. However, it is useful especially when you want to make changes to existing source code and you don't want to risk losing the original code. You can also accept or reject the collaborators' changes and even merge the codes to the upper branch.
+Managing branches is not as straightforward as there are so many options you can use for your command. However, it is useful especially when you want to make changes to existing source code and you don't want to risk losing the original code. You can also accept or reject the collaborators' changes and even merge the codes to the upper branch.
 
 To create the branch:
 ```git
