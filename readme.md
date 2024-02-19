@@ -72,6 +72,11 @@ You are currently exploring an old branch with bunch of files to "stage" and you
 git checkout [DESTINATION BRANCH NAME]
 ```
 Make sure the branch DESTINATION is created using `git branch [DESTINATION BRANCH NAME]`. The git checkout simply copies the files from an old branch to a destination branch and then automatically switches the branch you are exploring to the destination one, without typing `git switch [DESTINATION BRANCH NAME]`. Therefore, if you are completely moving the branch, delete the old one after the checkout.
+Alternatively, to create a branch, copy all the files to that new branch, and then explore that branch, use
+```git
+git checkout -b [DESTINATION BRANCH NAME]
+```
+noting that there is a `-b` string between `checkout` and `[DESTINATION BRANCH NAME]`.
 
 To delete a local branch (Does not remove the branch on GitHub):
 ```git

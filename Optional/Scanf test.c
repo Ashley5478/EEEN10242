@@ -5,7 +5,6 @@ char operator, quantity;
 
 int main()
 {
-    printf("Enter the operator: [+,-,*,x,/,%%]\n");
     scanf("%c",&operator);
 
     printf("Enter the first number:\n");
