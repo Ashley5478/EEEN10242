@@ -12,8 +12,11 @@ int main ()
     printf("Enter number:\n");
     scanf("%d",&i);
 
-    while (i < 10) {
+    while (1) {
         i++;
+        if (i == 15) {
+        break;
+        }
     }
 
     printf("Result: %d",i);
