@@ -65,12 +65,19 @@ To switch the branch you are exploring:
 git switch [DESTINATION BRANCH NAME]
 ```
 
-The default branch of the git is "main" which is the master.
+The default branch of the git is "main" which is the master. Please do not use "master" or any other names if you want to merge the project to the main branch as this would cause some conflicts when merging the files.
+
+You are currently exploring an old branch with bunch of files to "stage" and you want to move/copy to another branch. You wish to move all your workspace to a new branch named "DESTINATION" and this can be done by:
+```git
+git checkout DESTINATION
+```
+Make sure the branch DESTINATION is created using `git branch DESTINATION`. The git checkout simply copies the files from an old branch to a destination branch and then automatically switches the branch you are exploring to the destination one, without typing `git switch [DESTINATION BRANCH NAME]`. Therefore, if you are completely moving the branch, delete the old one after the checkout.
 
 To delete a local branch (Does not remove the branch on GitHub):
 ```git
 git branch -d [localBranchName]
 ```
+(Recommended)
 or
 ```git
 git branch --delete [localBranchName]
@@ -80,3 +87,9 @@ If you want to delete a remote branch on GitHub, use:
 ```git
 git push remote -d [RemoteBranchName]
 ```
+
+And finally, there is an option for you to revert the changes of your git commit. If you have made a mistake on your recent commit and want to revert to the old commit, use:
+```git
+git revert HEAD [NUMBER OF STEPS]
+```
+where [NUMBER OF STEPS] in natural numbers, *optional*, and determines how many commits you want to go backwards.
