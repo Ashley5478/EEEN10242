@@ -12,12 +12,8 @@ int main ()
     printf("Enter number:\n");
     scanf("%d",&i);
 
-    while (1) {
-        i++;
-        if (i == 15) {
-        break;
-        }
+    for (i = 1; i < 100; i++){
+        printf("%d\n",i);
     }
-
-    printf("Result: %d",i);
+    return 0;
 }
