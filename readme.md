@@ -67,11 +67,11 @@ git switch [DESTINATION BRANCH NAME]
 
 The default branch of the git is "main" which is the master. Please do not use "master" or any other names if you want to merge the project to the main branch as this would cause some conflicts when merging the files.
 
-You are currently exploring an old branch with bunch of files to "stage" and you want to move/copy to another branch. You wish to move all your workspace to a new branch named "DESTINATION" and this can be done by:
+You are currently exploring an old branch with bunch of files to "stage" and you want to move/copy to another branch. You wish to move all your workspace to a new branch named [DESTINATION BRANCH NAME] and this can be done by:
 ```git
-git checkout DESTINATION
+git checkout [DESTINATION BRANCH NAME]
 ```
-Make sure the branch DESTINATION is created using `git branch DESTINATION`. The git checkout simply copies the files from an old branch to a destination branch and then automatically switches the branch you are exploring to the destination one, without typing `git switch [DESTINATION BRANCH NAME]`. Therefore, if you are completely moving the branch, delete the old one after the checkout.
+Make sure the branch DESTINATION is created using `git branch [DESTINATION BRANCH NAME]`. The git checkout simply copies the files from an old branch to a destination branch and then automatically switches the branch you are exploring to the destination one, without typing `git switch [DESTINATION BRANCH NAME]`. Therefore, if you are completely moving the branch, delete the old one after the checkout.
 
 To delete a local branch (Does not remove the branch on GitHub):
 ```git
