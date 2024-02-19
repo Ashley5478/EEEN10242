@@ -12,14 +12,8 @@ int main ()
     printf("Enter number:\n");
     scanf("%d",&i);
 
-    if (i == 0) {
-        ++i;
-    }
-    else if (i == 5) {
-        i -= 2;
-    }
-    else {
-        printf("ERROR");
+    while (i < 10) {
+        i++;
     }
 
     printf("Result: %d",i);
