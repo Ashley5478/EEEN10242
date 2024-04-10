@@ -1,3 +1,6 @@
 [submodule "Lab_E/lab-e-Ashley5478"]
 	path = Lab_E/lab-e-Ashley5478
 	url = https://github.com/EEEN10242/lab-e-Ashley5478
+[submodule "Lab_B/lab-b-Ashley5478"]
+	path = Lab_B/lab-b-Ashley5478
+	url = https://github.com/EEEN10242/lab-b-Ashley5478
