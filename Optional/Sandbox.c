@@ -6,15 +6,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+int addNumbers(int a, int b){
+    return a+b;
+}
+
 int main ()
 {
-    int i = 0;
+    int num1 = 1;
+    int num2 = 3;
 
-    printf("Enter number:\n");
-    scanf("%d",&i);
-
-    for (i = 1; i < 100; i++){
-        printf("%d\n",i);
-    }
+    int result = addNumbers(num1, num2);
+    printf("Sum: %d", result);
+    
     return 0;
 }
+
