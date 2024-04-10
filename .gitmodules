@@ -4,3 +4,12 @@
 [submodule "Lab_B/lab-b-Ashley5478"]
 	path = Lab_B/lab-b-Ashley5478
 	url = https://github.com/EEEN10242/lab-b-Ashley5478
+[submodule "Lab_F/lab-f-Ashley5478"]
+	path = Lab_F/lab-f-Ashley5478
+	url = https://github.com/EEEN10242/lab-f-Ashley5478
+[submodule "Lab_D/lab-d-Ashley5478"]
+	path = Lab_D/lab-d-Ashley5478
+	url = https://github.com/EEEN10242/lab-d-Ashley5478
+[submodule "Lab_C/lab-c-Ashley5478"]
+	path = Lab_C/lab-c-Ashley5478
+	url = https://github.com/EEEN10242/lab-c-Ashley5478
