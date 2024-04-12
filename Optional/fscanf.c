@@ -14,7 +14,7 @@ int main(){
     }
     */
 
-
+/*
     for(int i = 0; i < 10; i++) {
         scanf(" %c", &array[i]);
     }
@@ -22,6 +22,33 @@ int main(){
     for(int i = 0; i < 10; i++) {
         printf("%c", array[i]);
     }
+*/
+
+FILE *fin;
+
+    fin = fopen( "Test.txt", "r" );
+    if( fin == NULL )
+        return 1;
+
+    printf( "Character count: %d.\n", charcount( fin ) );
+
+    fclose( fin );
 
     return 0;
+}
+
+int charcount( FILE *const fin )
+{
+    int c, count;
+
+    count = 0;
+    for( ;; )
+    {
+        c = fgetc( fin );
+        if( c == EOF || c == '\n' )
+            break;
+        ++count;
+    }
+
+    return count;
 }
