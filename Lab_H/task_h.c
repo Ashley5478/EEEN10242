@@ -11,18 +11,42 @@ int main(void) {
     while ((ch = getchar()) != '\n') { // get one character at a time
         filename[i++] = ch;
         // Enter your code under here
-
-        
+            // FIND THE END OF TEXT INDEX AND THEN STORE THIS VALUE TO ANOTHER NUMERICAL CONSTANT!!!
+            // Example: "Minecraft.exe.msi" <-- Two dots. The file extender is therefore .msi
     }
+
+        int end_of_file = i - 1;    // If you want to use i, then the use filename[++i]
+
+
+//================
+
     for (; i < N+1; i++) { // fill the rest of the array with null characters
-        filename[i] = '\0';
+        buffer[i] = '\0';   // Also possible to use filename[i] thanks to pointer
     }
     
 
     // Enter your code under here
 
+    int dotflag = 0;
 
+    while(buffer[end_of_file] != '.' && end_of_file > 0) { // Step backwards
+        char current_char = buffer[end_of_file];
+        //printf("%c", current_char);   
+        --end_of_file;
+    }
+    if(buffer[end_of_file] == '.') {    // Valid input if there is a dot
+        dotflag = 1;
+    }
+    if(dotflag == 0) {  // Error if no dot or no input detected
+        printf("Error!");
+        return 1;
+    }
 
+    while(buffer[end_of_file] != '\n' && buffer[end_of_file] != '\0') { // Step forward
+        char current_char = buffer[end_of_file];
+        printf("%c", current_char);
+        end_of_file++;
+    }
 
     return EXIT_SUCCESS;
 }
