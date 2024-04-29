@@ -25,3 +25,9 @@
 [submodule "lab-j-Ashley5478"]
 	path = lab-j-Ashley5478
 	url = https://github.com/EEEN10242/lab-j-Ashley5478
+[submodule "Lab_I/lab-i-Ashley5478"]
+	path = Lab_I/lab-i-Ashley5478
+	url = https://github.com/EEEN10242/lab-i-Ashley5478
+[submodule "Lab_J/lab-j-Ashley5478"]
+	path = Lab_J/lab-j-Ashley5478
+	url = https://github.com/EEEN10242/lab-j-Ashley5478
