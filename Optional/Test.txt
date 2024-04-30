@@ -1,6 +1,5 @@
-1
-123
-1  4
- 2
-1    67 9
-a2cde6
+L B L L B
+L L L L L
+L L L L L
+L L L L L
+D L L L L

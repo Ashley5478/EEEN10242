@@ -7,10 +7,10 @@
 
 #define NUMROWS	 5    // map size
 #define NUMCOLS  5    // map size
-#define NUMWALKS 100 // number of random walks
+#define NUMWALKS 10 // number of random walks
 #define NUMSTEP  3   // number of steps in each walk
 // Enter any other #defines as you deem necessary below
-
+int randCALL = 0;
 
 
 
@@ -19,11 +19,11 @@ int calc_status(char current_tile, char next_tile, int move_count) {
         int result = 1; // Instant win
         return result;
     }
-    if(current_tile == 'L' && next_tile == 'B' && move_count <= NUMSTEP) {
+    if(current_tile == 'L' && next_tile == 'B' && move_count <= NUMSTEP) {  // Win even if the move count reached limit per trial, as long as landing on tile 'B'
         int result = 1; // Win
         return result;
     }
-    if(current_tile == 'L' && next_tile == 'L' && move_count <= NUMSTEP) {
+    if(current_tile == 'L' && next_tile == 'L' && move_count < NUMSTEP) {   // Only allow further moves if the move count has not reached the limit yet
         int result = 2; // Keep going
         return result;
     }
@@ -180,7 +180,6 @@ int main(void) {
                 if(column_index_read % 2 == 0) {  // Filters indices of only even numbers
                     raw_map[row_index_read][column_index_read / 2] = raw_line[column_index_read];   // Write to raw_map[9][9] array for processing
                 }
-//                printf("%c", raw_line[column_index_read]); // Debugging only, will be removed.
             }   // Error message if unmasked line length is not (2 * NUMCOLS) - 1.
                 // This is tested using the string[2*NUMCOLS] != '\0' or != '\n' (in a single quotation mark).
                 // If the '\0' or '\n' is called at the index equal or less than (2*NUMCOLS)-1, then error message.
@@ -237,10 +236,11 @@ int main(void) {
 
 
 
-                while(move_count <= NUMSTEP && total_steps < NUMWALKS) {
+                while(move_count < NUMSTEP && total_steps < NUMWALKS) {
                     // Rough move action: row_index + step[next_step()][0], column_index + step[next_step][1]
 //                    int random = rand();    // Constant random number for testing moves, randomizes every for loop cycle
                     int move_code = next_step(rand());  // Mapped step direction code from 0 to 7, from north to north-west in clockwise
+                    randCALL ++;
 
                     int row_move = step[move_code][0];
                     int column_move = step[move_code][1];
@@ -248,7 +248,8 @@ int main(void) {
                     total_steps++;  // Number of steps currently performing. Example: if total_steps = 1, then this is the first step. Therefore, there's no such zero steps.
                     move_count++;
 
-                    if((move_code == 0 && row_index != 0) || (move_code == 1 && row_index != 0 && column_index != max_column) || (move_code == 2 && column_index != 0) || (move_code == 3 && row_index != max_row && column_index != max_column) || (move_code == 4 && column_index != max_column) || (move_code == 5 && row_index != max_row && column_index != 0) || (move_code == 6 && column_index != 0) || (move_code == 7 && row_index != 0) && column_index != 0) {
+                    // 01234567, N, NE, E, SE, S, SW, W, NW. Filtering movements for preventing explorer from leaving the map through edges and corners. 
+                    if((move_code == 0 && row_index > 0) || (move_code == 1 && row_index > 0 && column_index < max_column) || (move_code == 2 && column_index < max_column) || (move_code == 3 && row_index < max_row && column_index < max_column) || (move_code == 4 && column_index < max_column) || (move_code == 5 && row_index < max_row && column_index > 0) || (move_code == 6 && column_index > 0) || (move_code == 7 && row_index > 0 && column_index > 0)) {
                         row_index_next = row_index + row_move;
                         column_index_next = column_index + column_move;
                     } // Move the explorer, does not work if the explorer is at the edge to prevent conflicts
@@ -258,8 +259,8 @@ int main(void) {
                     }
 
 
-
-                    if(calc_status(raw_map[row_index][column_index],raw_map[row_index_next][column_index_next],move_count) == 1) {   // Win
+                    int status = calc_status(raw_map[row_index][column_index],raw_map[row_index_next][column_index_next],move_count);
+                    if(status == 1) {   // Win
                         winning_moves[wins] = move_count;   // Saving the number of moves for winning trials for processing average and stdev. A +1 has been added since the move_count has not been incremented before collecting the move count data.
 
                     //    trials++;
@@ -268,7 +269,7 @@ int main(void) {
 //                        total_steps++;
                         break;  // Starts a new trial once the journey has concluded.
                     }
-                    if(calc_status(raw_map[row_index][column_index],raw_map[row_index_next][column_index_next],move_count) == 0) {   // Lose
+                    if(status == 0) {   // Lose
                     //    trials++;
 
 //                        total_steps++;  // (NOTE: If lost by out of move count, then skip this.)
@@ -343,6 +344,8 @@ int main(void) {
             }
         }
         printf("\n");
-    }  
+    }
+
+    printf("\nRandom Calls: %d", randCALL);
     return 0;
 }
