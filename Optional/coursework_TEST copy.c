@@ -22,7 +22,7 @@ int calc_status(char current_tile, char next_tile, int move_count) {
         int result = 1; // Win
         return result;
     }
-    if(current_tile == 'L' && next_tile == 'L' && move_count < NUMSTEP) {   // 
+    if(current_tile == 'L' && next_tile == 'L' && move_count < NUMSTEP) {
         int result = 2; // Keep going
         return result;
     }
@@ -67,51 +67,6 @@ int next_step(int random_number) {   // Next step using rand() as input, to be u
         return one_step;
     }
 }
-
-double mean(int data[], int data_count) {  // Mean calculator
-    double sum = 0, mean;
-    int i;
-    for(i = 0; i < data_count; i++) {
-        sum += data[i];
-    }
-
-    if(data_count > 0) {        // Only runs if there is a data count to avoid dividing by zero
-        mean = sum / data_count;
-    }
-    else {  // If the explorer cannot win due to standing on a dangerous tile, assume mean = 0 to avoid errors
-        mean = 0;
-    }
-    return mean;
-}
-
-double stdev(int data[], int data_count) { // Standard deviation calculator
-    double sum = 0, mean, variance = 0;
-    int i;
-    for(i = 0; i < data_count; i++) {
-        sum += data[i];
-    }
-
-    if(data_count > 0) {
-        mean = sum / data_count;
-    }
-    else {
-        mean = 0;
-    }
-
-    for(i = 0; i < data_count; i++) {
-        variance += pow(data[i] - mean, 2);
-    }
-
-    if(data_count > 0) {
-        double stdev = sqrt(variance / data_count);
-        return stdev;
-    }
-    else {
-        double stdev = 0.0;
-        return stdev;
-    }
-}
-
 
 
 
@@ -260,16 +215,21 @@ Step Limit: Total number of 1000 steps allowed each tile
 
                 // Instant win/lose without the need to calcualte 1000 trials (maximum trials within NUMWALK) for the guaranteed outcome. Gives conclusion without any moves.
                 if(current_tile == 'B') {     // Instant win for starting on tile 'B'
+                //    trials = 1;     // Tests one trial
                     wins = 1;       // Record as 1 win on 1 trial (100% winning chance)
                     winning_moves[0] = 0;   // Records as 0 moves for calculating average moves and stdev. The Wins will be 1.
                     break;              // No need for additional trials for this tile as the explorer is guaranteed to win.
                 }
                 if(current_tile == 'D' || current_tile == 'V' || current_tile == 'W') {     // Instant loss for starting on dangerous tiles 'DVW'
+                //    trials++;   // Tests one trial (or more) for calculation
+                    //wins = 0; // Optional but should be 0, already initialized as wins = 0 at the beginning of the for loop. 0% winning chance.
                     break;              // No need for additional trials for this tile as the explorer is guaranteed to lose.
                 }
 
 
                 while(move_count < NUMSTEP && total_steps < NUMWALKS) {
+                    // Rough move action: row_index + step[next_step()][0], column_index + step[next_step][1]
+//                    int random = rand();    // Constant random number for testing moves, randomizes every for loop cycle
                     int move_code = next_step(rand());  // Mapped step direction code from 0 to 7, from north to north-west in clockwise
 
                     int row_move = step[move_code][0];
@@ -292,29 +252,20 @@ Step Limit: Total number of 1000 steps allowed each tile
                     int status = calc_status(raw_map[row_index][column_index],raw_map[row_index_next][column_index_next],move_count);   // Stores the calculated status
                     if(status == 1) {   // Win
                         winning_moves[wins] = move_count;   // Saving the number of moves for winning trials for processing average and stdev. A +1 has been added since the move_count has not been incremented before collecting the move count data.
-
                         wins++;
-   
-                        //total_steps++;
                         break;  // Starts a new trial once the journey has concluded.
                     }
                     if(status == 0) {   // Lose
                         break;  // Starts a new trial once the journey has concluded.
                     }
                     else {  // calc_status may be 2. The loop continues as the journey has not yet ended.
-//                        move_count++;   
-//                        total_steps++;
                         row_index = row_index_next;         // Explorer has moved one step.
                         column_index = column_index_next;
                     }
                 }
-// QUESTION: 1. Does beginning at the tile 'B', 'D', 'V', 'W' cost a move? No but it does not matter as the total move consumption of 1000 is for each test tile.
-// 2. Does incompleted journey count as a trial?' Yes and should be considered as a loss.
             }
             // Calculate the escape chance, mean, and stdev of the step and then store them to the prob_map, leng_map, and stdev_map.
             prob_map[row_index_test][column_index_test] = (wins / (double) trials) * 100; // Convert one of the values (type casting) to double to return double value for division between two integers. Display values in percentages.
-            leng_map[row_index_test][column_index_test] = mean(winning_moves, wins);
-            stdev_map[row_index_test][column_index_test] = stdev(winning_moves, wins);
         }
         row_index_test++;  // Completed rows
     }
@@ -343,32 +294,6 @@ Step Limit: Total number of 1000 steps allowed each tile
             }
             if(j == NUMCOLS - 1) {
                 printf("%6.2f", prob_map[i][j]);
-            }
-        }
-        printf("\n");
-    }
-
-    printf("\nMean path length:\n");
-    for(int i = 0; i < NUMROWS; i++) {
-        for(int j = 0; j < NUMCOLS; j ++) {
-            if(j < NUMCOLS - 1) {
-                printf("%.2f ", leng_map[i][j]);
-            }
-            if(j == NUMCOLS - 1) {
-                printf("%.2f", leng_map[i][j]);
-            }
-        }
-        printf("\n");
-    }
-
-    printf("\nStandard deviation of path length:\n");
-    for(int i = 0; i < NUMROWS; i++) {
-        for(int j = 0; j < NUMCOLS; j ++) {
-            if(j < NUMCOLS - 1) {
-                printf("%.2f ", stdev_map[i][j]);
-            }
-            if(j == NUMCOLS - 1) {
-                printf("%.2f", stdev_map[i][j]);
             }
         }
         printf("\n");
