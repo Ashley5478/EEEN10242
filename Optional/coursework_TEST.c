@@ -1,4 +1,6 @@
 // Add brief description here
+// This is the C coursework for "Escape the Jurrasic Island" which simulates an explorer on a random tile with random moves to calculate the chance of escape or survival.
+// This model always uses the same seed 
 
 #include <stdio.h>
 // Enter any other #includes that you deem necessary below
@@ -10,7 +12,7 @@
 #define NUMWALKS 1000 // number of random walks
 #define NUMSTEP  10   // number of steps in each walk
 // Enter any other #defines as you deem necessary below
-
+// NOTE: Walks means number of trials of a tile that will be tested. In this case, 1000 trials will be taken.
 
 
 int calc_status(char current_tile, char next_tile, int move_count) {
@@ -22,49 +24,13 @@ int calc_status(char current_tile, char next_tile, int move_count) {
         int result = 1; // Win
         return result;
     }
-    if(current_tile == 'L' && next_tile == 'L' && move_count < NUMSTEP) {   // 
+    if(current_tile == 'L' && next_tile == 'L' && move_count < NUMSTEP) {
         int result = 2; // Keep going
         return result;
     }
     else {
-        int result = 0; // Lose due to stepping on tiles 'D', 'V', and W'
+        int result = 0; // Lose due to stepping on tiles 'D', 'V', and W' or running out of walks
         return result;
-    }
-}
-
-int next_step(int random_number) {   // Next step using rand() as input, to be used with the step 2D array.
-    int one_step;
-    if(random_number % 8 == 0) {
-        one_step = 0;
-        return one_step;
-    }    
-    if(random_number % 8 == 1) {
-        one_step = 1;
-        return one_step;
-    }
-    if(random_number % 8 == 2) {
-        one_step = 2;
-        return one_step;
-    }    
-    if(random_number % 8 == 3) {
-        one_step = 3;
-        return one_step;
-    }
-    if(random_number % 8 == 4) {
-        one_step = 4;
-        return one_step;
-    }    
-    if(random_number % 8 == 5) {
-        one_step = 5;
-        return one_step;
-    }
-    if(random_number % 8 == 6) {
-        one_step = 6;
-        return one_step;
-    }    
-    if(random_number % 8 == 7) {
-        one_step = 7;
-        return one_step;
     }
 }
 
@@ -95,7 +61,7 @@ double stdev(int data[], int data_count) { // Standard deviation calculator
         mean = sum / data_count;
     }
     else {
-        mean = 0;
+        mean = 0;   // No data = zero, divide by zero prevention
     }
 
     for(i = 0; i < data_count; i++) {
@@ -117,9 +83,8 @@ double stdev(int data[], int data_count) { // Standard deviation calculator
 
 
 int main(void) {
-    srand(123456);  // Seed
+    srand(123456);  // Seed for the coursework
 
-    int total_steps = 0;    // Total steps for a tile that has been tested throughout the trial
     int move_count = 0;     // Total steps for a trial that has been used
     int trials = 0;         // Number of trials on a tile completed
     int wins = 0;           // Number of wins (successful landing on tile 'B' within move_count <= 10)
@@ -146,23 +111,14 @@ int main(void) {
 //    int randCalls = 0; // DEBUG ONLY, counts how many times the rand() function has been called. Should be NUMWALKS * number of 'L' tiles on the map.
 
     // Load the map
-/*Possible input errors: File blank, no spaces between letters, invalid letter,
-map size mismatch, lowercase letters, blank lines, etc.
-
-Error message validation method
-1. Load the each line. Before masking, strlen must be 2*NUMCOLS-1.
-2. Mask off the spaces by using the form scanf(" %c") and and then use strlen. If the strlen != NUMCOLS,
-then error message.
-3. Pick only the even number index from 0 to 2*(NUMCOLS-1).
-4. The array may contain spaces but if this happens, then error message shows up. This is due to random walker function only accepts five characters as strings, which are "BDLVW"
-
+/*Possible input errors: File blank, no spaces between letters, invalid letter, map size mismatch, lowercase letters, blank lines, etc.
 Example error inputs:
-Unmasked row is not 2*NUMCOLS-1
-"B D L V W B D L V " <-- 17 characters needed but 18 is used.
+Unmasked row is not 2*NUMCOLS-1 long:
+"B D L V W B D L V " <-- 17 characters needed but 18 is used. (Additional spaces at the end)
 or
-"B D L V W  B D L V"
+"B D L V W  B D L V" <-- Error due to additional spaces in between letters.
 ----
-Masked row is not NUMCOLS:
+Masked row is not NUMCOLS long:
 "B D L V W B D LVW" <-- 17 characters needed (Correct if unmasked)
 "BDLVWBDLVW" <-- 9 characters needed but 10 is used.
 ----
@@ -170,8 +126,10 @@ Incorrect spacing:
 "B D L V W  BD L V" <-- 17 characters needed (Correct length)
 Array would pick up the even number index, which gives:
 [B,D,L,V,W, ,D,L,V] <-- A space due to incorrect spacing has been picked up. The space will be considered as an invalid character and later error message given by the random walker function.
+----
+Additional blank line or content that is beyond the NUMROWS will also return an error. 
 */
-// Note: If the software aims to accept multiple spaces between letters, use fscanf(fptr, "%c ", &raw_map[row_index_read][column_index_read]);, although the software is specified to only accept the inputs in a valid and organized format.
+// Note: If the software aims to accept multiple spaces between letters, use fscanf(fptr, "%c ", &raw_map[row_index_read][column_index_read]);, although the coursework is specified to only accept the inputs in a valid and organized format.
 
     FILE *fptr;
     char raw_line[2 * NUMCOLS];
@@ -213,14 +171,14 @@ Array would pick up the even number index, which gives:
                 // If the '\0' or '\n' is called at the index equal or less than (2*NUMCOLS)-1, then error message.
                 // This can be done by using 1D array. Do not attempt to use simple strings.
                 // Unfortunately, it is not possible to test using length of string as this is very glitchy and complex.
-            row_index_read++;
+            row_index_read++;   // Once reading the column of desired number is finished, move on to the next line.
 
             if(row_index_read > NUMROWS) {   //If the number of lines that have been read is greater than NUMROWS, show error message.
                 printf("Error!");   // Input line count exceeded
                 return 1;
             }
         }
-    fclose(fptr);
+    fclose(fptr);   // File no longer needed to be opened
 
 
 
@@ -246,10 +204,9 @@ Step Limit: Total number of 1000 steps allowed each tile
             int winning_moves[NUMWALKS] = {0};    // Number of winning moves of a tile for each trial, maximum of NUMWALKS (1000), if taking the largest case of "B" tile at the start.
             trials = 0;         // Number of trials on a tile completed
             wins = 0;           // Number of wins (successful landing on tile 'B' within move_count <= 10)
-            total_steps = 0;
             move_count = 0;
 
-            while(total_steps < NUMWALKS) {  
+            while(trials < NUMWALKS) {  
                 row_index = row_index_test;     // Each beginning of the trial where the tile is tested, the explorer will return to this test tile initially.
                 column_index = column_index_test;
                 move_count = 0;
@@ -260,50 +217,66 @@ Step Limit: Total number of 1000 steps allowed each tile
 
                 // Instant win/lose without the need to calcualte 1000 trials (maximum trials within NUMWALK) for the guaranteed outcome. Gives conclusion without any moves.
                 if(current_tile == 'B') {     // Instant win for starting on tile 'B'
+                //    trials = 1;     // Tests one trial
                     wins = 1;       // Record as 1 win on 1 trial (100% winning chance)
                     winning_moves[0] = 0;   // Records as 0 moves for calculating average moves and stdev. The Wins will be 1.
                     break;              // No need for additional trials for this tile as the explorer is guaranteed to win.
                 }
                 if(current_tile == 'D' || current_tile == 'V' || current_tile == 'W') {     // Instant loss for starting on dangerous tiles 'DVW'
+                //    trials++;   // Tests one trial (or more) for calculation
+                    //wins = 0; // Optional but should be 0, already initialized as wins = 0 at the beginning of the for loop. 0% winning chance.
                     break;              // No need for additional trials for this tile as the explorer is guaranteed to lose.
                 }
 
 
-                while(move_count < NUMSTEP && total_steps < NUMWALKS) {
-                    int move_code = next_step(rand());  // Mapped step direction code from 0 to 7, from north to north-west in clockwise
+                while(move_count < NUMSTEP) {
+                    // Rough move action: row_index + step[next_step()][0], column_index + step[next_step][1]
+//                    int random = rand();    // Constant random number for testing moves, randomizes every for loop cycle
+                    int move_code = rand() % 8;  // Mapped step direction code from 0 to 7, from north to north-west in clockwise, to be used with the step 2D array.
+                    //printf("%d", move_code); // DEBUG ONLY
+                    //randCalls++;    // DEBUG ONLY, increment by 1 each time the rand() function is called.
 
+                    //int row_move = step[move_code][0];
+                    //int column_move = step[move_code][1];
                     int row_move = step[move_code][0];
                     int column_move = step[move_code][1];
                     
-                    total_steps++;  // Number of steps currently performing. Example: if total_steps = 1, then this is the first step. Therefore, there's no such zero steps.
-                    move_count++;
+                    move_count++;   // Number of steps currently performing within a trial. Each time the exploer moves, this value is incremented until steps on tiles BDVW or reaches the maximum allowed of 10 steps defined by NUMSTEP. After this happens, it is said that the trial has ended so move_count goes back to 0.
 
-                    if((move_code == 0 && row_index > 0) || (move_code == 1 && row_index > 0 && column_index < max_column) || (move_code == 2 && column_index < max_column) || (move_code == 3 && row_index < max_row && 	column_index < max_column) || (move_code == 4 && row_index < max_row) || (move_code == 5 && row_index < max_row && column_index > 0) || (move_code == 6 && column_index > 0) || (move_code == 7 && row_index > 0 && column_index > 0)) {
+                    if((move_code == 0 && row_index > 0) || (move_code == 1 && row_index > 0 && column_index < max_column) || (move_code == 2 && column_index < max_column) || (move_code == 3 && row_index < max_row && column_index < max_column) || (move_code == 4 && row_index < max_row) || (move_code == 5 && row_index < max_row && column_index > 0) || (move_code == 6 && column_index > 0) || (move_code == 7 && row_index > 0 && column_index > 0)) {
                         row_index_next = row_index + row_move;
                         column_index_next = column_index + column_move;
-                    } // Move the explorer, does not work if the explorer is at the edge to prevent conflicts
+                    } // Move the explorer, does not work if the explorer is at the edge or corner and attempts to leave the map to prevent conflicts. Subsequent tests await for corner movements on edges. Nested if statement is used for multiple if statements, unless there is a return or break statement for each if statement.
                     else {
-                        row_index_next = row_index;
-                        column_index_next = column_index;
+                        if((move_code == 1 && row_index == 0 && column_index < max_column) || (move_code == 3 && row_index == max_row && column_index < max_column) || (move_code == 5 && row_index == max_row && column_index > 0) || (move_code == 7 && row_index == 0 && column_index > 0)) {
+                            row_index_next = row_index;
+                            column_index_next = column_index + column_move;
+                        } // If the explorer is at the North and South edge (not corners) and attempts to move diagonally, only move across the row (West and East).
+                        else {
+                            if((move_code == 1 && row_index > 0 && column_index == max_column) || (move_code == 3 && row_index < max_row && column_index == max_column) || (move_code == 5 && row_index < max_row && column_index == 0) || (move_code == 7 && row_index > 0 && column_index == 0)) {
+                                row_index_next = row_index + row_move;
+                                column_index_next = column_index;
+                            } // If the explorer is at the West and East edge (not corners) and attempts to move diagonally, only move across the column (North and South).
+                            else {
+                                row_index_next = row_index;
+                                column_index_next = column_index;
+                            } // If the explorer is at the edge and moves towards the edge; or is at the corner and moves towards the corner, then remain stationary but still cost a move_count.
+                        }
                     }
-
 
 
                     int status = calc_status(raw_map[row_index][column_index],raw_map[row_index_next][column_index_next],move_count);   // Stores the calculated status
                     if(status == 1) {   // Win
                         winning_moves[wins] = move_count;   // Saving the number of moves for winning trials for processing average and stdev. A +1 has been added since the move_count has not been incremented before collecting the move count data.
 
+                    //    trials++;
                         wins++;
-   
-                        //total_steps++;
                         break;  // Starts a new trial once the journey has concluded.
                     }
                     if(status == 0) {   // Lose
                         break;  // Starts a new trial once the journey has concluded.
                     }
                     else {  // calc_status may be 2. The loop continues as the journey has not yet ended.
-//                        move_count++;   
-//                        total_steps++;
                         row_index = row_index_next;         // Explorer has moved one step.
                         column_index = column_index_next;
                     }
@@ -315,6 +288,9 @@ Step Limit: Total number of 1000 steps allowed each tile
             prob_map[row_index_test][column_index_test] = (wins / (double) trials) * 100; // Convert one of the values (type casting) to double to return double value for division between two integers. Display values in percentages.
             leng_map[row_index_test][column_index_test] = mean(winning_moves, wins);
             stdev_map[row_index_test][column_index_test] = stdev(winning_moves, wins);
+
+            // NOTE: The values for standard deviation is very small compared to other numerical quantities (average length and probability) so may not be in the designated tolerance range.
+            // Due to differences in method and order of implementing random movement tests, the numerical values may not match the example values on the autograder, although in this case they match.
         }
         row_index_test++;  // Completed rows
     }
@@ -323,10 +299,10 @@ Step Limit: Total number of 1000 steps allowed each tile
 
     // Print results
     printf("Map:\n");
-    for(int i = 0; i < NUMROWS; i++) {
+    for(int i = 0; i < NUMROWS; i++) {  // Increment line once the column has done displaying
         for(int j = 0; j < NUMCOLS; j ++) {
             if(j < NUMCOLS - 1) {
-                printf("%c ", raw_map[i][j]);
+                printf("%c ", raw_map[i][j]); // With spaces except the last character of the row.
             }
             if(j == NUMCOLS - 1) {  // No extra spaces at the end of the string
                 printf("%c", raw_map[i][j]);
@@ -339,7 +315,7 @@ Step Limit: Total number of 1000 steps allowed each tile
     for(int i = 0; i < NUMROWS; i++) {
         for(int j = 0; j < NUMCOLS; j ++) {
             if(j < NUMCOLS - 1) {
-                printf("%6.2f ", prob_map[i][j]);   // Aligning numbers
+                printf("%6.2f ", prob_map[i][j]);   // Aligning numbers. 6 characters on "100.00" and .2f for up to 2 decimal places
             }
             if(j == NUMCOLS - 1) {
                 printf("%6.2f", prob_map[i][j]);
