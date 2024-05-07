@@ -68,6 +68,35 @@ int next_step(int random_number) {   // Next step using rand() as input, to be u
     }
 }
 
+double stdev(int data[], int data_count) { // Standard deviation calculator
+    double sum = 0, mean, variance = 0;
+    int i;
+    for(i = 0; i < data_count; i++) {
+        sum += data[i];
+    }
+
+    if(data_count > 0) {
+        mean = sum / data_count;
+    }
+    else {
+        mean = 0;
+    }
+
+    for(i = 0; i < data_count; i++) {
+        variance += pow(data[i] - mean, 2);
+    }
+
+    if(data_count > 0) {
+        double stdev = sqrt(variance / data_count);
+        return stdev;
+    }
+    else {
+        double stdev = 0.0;
+        return stdev;
+    }
+}
+
+
 
 
 
@@ -231,7 +260,11 @@ Step Limit: Total number of 1000 steps allowed each tile
                     // Rough move action: row_index + step[next_step()][0], column_index + step[next_step][1]
 //                    int random = rand();    // Constant random number for testing moves, randomizes every for loop cycle
                     int move_code = next_step(rand());  // Mapped step direction code from 0 to 7, from north to north-west in clockwise
+                    //printf("%d", move_code); // DEBUG ONLY
+                    //randCalls++;    // DEBUG ONLY, increment by 1 each time the rand() function is called.
 
+                    //int row_move = step[move_code][0];
+                    //int column_move = step[move_code][1];
                     int row_move = step[move_code][0];
                     int column_move = step[move_code][1];
                     
@@ -241,31 +274,72 @@ Step Limit: Total number of 1000 steps allowed each tile
                     if((move_code == 0 && row_index > 0) || (move_code == 1 && row_index > 0 && column_index < max_column) || (move_code == 2 && column_index < max_column) || (move_code == 3 && row_index < max_row && 	column_index < max_column) || (move_code == 4 && row_index < max_row) || (move_code == 5 && row_index < max_row && column_index > 0) || (move_code == 6 && column_index > 0) || (move_code == 7 && row_index > 0 && column_index > 0)) {
                         row_index_next = row_index + row_move;
                         column_index_next = column_index + column_move;
-                    } // Move the explorer, does not work if the explorer is at the edge to prevent conflicts
+                    } // Move the explorer, does not work if the explorer is at the edge or corner and attempts to leave the map to prevent conflicts
                     else {
-                        row_index_next = row_index;
-                        column_index_next = column_index;
+                        if((move_code == 1 && row_index == 0 && column_index < max_column) || (move_code == 3 && row_index == max_row && column_index < max_column) || (move_code == 5 && row_index == max_row && column_index > 0) || (move_code == 7 && row_index == 0 && column_index > 0)) {
+                            row_index_next = row_index;
+                            column_index_next = column_index + column_move;
+                        } // If the explorer is at the North and South edge (not corners) and attempts to move diagonally, only move across the row (West and East).
+                        else {
+                            if((move_code == 1 && row_index > 0 && column_index == max_column) || (move_code == 3 && row_index < max_row && column_index == max_column) || (move_code == 5 && row_index < max_row && column_index == 0) || (move_code == 7 && row_index > 0 && column_index == 0)) {
+                                row_index_next = row_index + row_move;
+                                column_index_next = column_index;
+                            } // If the explorer is at the West and East edge (not corners) and attempts to move diagonally, only move across the column (North and South).
+                            else {
+                                row_index_next = row_index;
+                                column_index_next = column_index;
+                            }
+                        }
                     }
-
 
 
                     int status = calc_status(raw_map[row_index][column_index],raw_map[row_index_next][column_index_next],move_count);   // Stores the calculated status
                     if(status == 1) {   // Win
                         winning_moves[wins] = move_count;   // Saving the number of moves for winning trials for processing average and stdev. A +1 has been added since the move_count has not been incremented before collecting the move count data.
+
+                    //    trials++;
                         wins++;
+   
+                        //total_steps++;
                         break;  // Starts a new trial once the journey has concluded.
                     }
                     if(status == 0) {   // Lose
+                    //    trials++;
+
+                        //total_steps++;  // (NOTE: If lost by out of move count, then skip this.)
+
                         break;  // Starts a new trial once the journey has concluded.
                     }
                     else {  // calc_status may be 2. The loop continues as the journey has not yet ended.
+//                        move_count++;   
+//                        total_steps++;
                         row_index = row_index_next;         // Explorer has moved one step.
                         column_index = column_index_next;
                     }
                 }
+// QUESTION: 1. Does beginning at the tile 'B', 'D', 'V', 'W' cost a move? No but it does not matter as the total move consumption of 1000 is for each test tile.
+// 2. Does incompleted journey count as a trial?' Yes and should be considered as a loss.
             }
             // Calculate the escape chance, mean, and stdev of the step and then store them to the prob_map, leng_map, and stdev_map.
             prob_map[row_index_test][column_index_test] = (wins / (double) trials) * 100; // Convert one of the values (type casting) to double to return double value for division between two integers. Display values in percentages.
+
+
+
+    double sum = 0, mean;
+    int i;
+    for(i = 0; i < wins; i++) {
+        sum += winning_moves[i];
+    }
+
+    if(wins > 0) {        // Only runs if there is a data count to avoid dividing by zero
+        mean = sum / wins;
+    }
+    else {  // If the explorer cannot win due to standing on a dangerous tile, assume mean = 0 to avoid errors
+        mean = 0;
+    }
+
+            leng_map[row_index_test][column_index_test] = mean;
+            stdev_map[row_index_test][column_index_test] = stdev(winning_moves, wins);
         }
         row_index_test++;  // Completed rows
     }
@@ -294,6 +368,32 @@ Step Limit: Total number of 1000 steps allowed each tile
             }
             if(j == NUMCOLS - 1) {
                 printf("%6.2f", prob_map[i][j]);
+            }
+        }
+        printf("\n");
+    }
+
+    printf("\nMean path length:\n");
+    for(int i = 0; i < NUMROWS; i++) {
+        for(int j = 0; j < NUMCOLS; j ++) {
+            if(j < NUMCOLS - 1) {
+                printf("%.2f ", leng_map[i][j]);
+            }
+            if(j == NUMCOLS - 1) {
+                printf("%.2f", leng_map[i][j]);
+            }
+        }
+        printf("\n");
+    }
+
+    printf("\nStandard deviation of path length:\n");
+    for(int i = 0; i < NUMROWS; i++) {
+        for(int j = 0; j < NUMCOLS; j ++) {
+            if(j < NUMCOLS - 1) {
+                printf("%.2f ", stdev_map[i][j]);
+            }
+            if(j == NUMCOLS - 1) {
+                printf("%.2f", stdev_map[i][j]);
             }
         }
         printf("\n");
